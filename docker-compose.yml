@@ -36,7 +36,7 @@ services:
 
   # 瞭望塔 容器监听更新
   watchtower:
-    image: watchtower
+    image: containrrr/watchtower
     container_name: watcher
     restart: always
     environment:
