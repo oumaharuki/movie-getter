@@ -2,9 +2,9 @@ version: '3'
 services:
 
   db:
-    image: "mysql:5.7"
+    image: "mysql"
     # 5.7内存占用小，如果要性能更高可以使用mysql最新版
-    container_name: movie_mysql
+    container_name: mysql
     command:
       [
         '--character-set-server=utf8mb4', #设置utf8编码
@@ -21,7 +21,7 @@ services:
   movie:
     depends_on:
       - db
-    image: "yunyizhiying/movie"
+    image: "movie"
     container_name: movie
     ports:
       - "8000:8000"
@@ -36,8 +36,8 @@ services:
 
   # 瞭望塔 容器监听更新
   watchtower:
-    image: containrrr/watchtower
-    container_name: movie_watcher
+    image: watchtower
+    container_name: watcher
     restart: always
     environment:
       - TZ=Asia/Shanghai
