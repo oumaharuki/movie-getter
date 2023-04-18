@@ -44,7 +44,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /root/.docker/config.json:/config.json
-    command: movie movie_watcher --cleanup --schedule "0 0 4 * * *"
+    command: movie movie_watcher --cleanup --schedule "0 0 1 * * *"
     # command: movie movie_watcher --cleanup --interval 60
 volumes:
   mysql_data:
