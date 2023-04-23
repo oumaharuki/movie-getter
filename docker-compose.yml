@@ -31,7 +31,7 @@ services:
     restart: always
     network_mode: my-network
     extra_hosts:
-      - "host.docker.internal:host-gateway"
+      - "host.docker.internal:{{.HostIP}}"
     environment:
       TZ: Asia/Shanghai
       MYSQL_HOST: db:3306 # mysql地址
