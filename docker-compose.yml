@@ -5,6 +5,8 @@ services:
     image: "mysql"
     # 5.7内存占用小，如果要性能更高可以使用mysql最新版
     container_name: mysql
+    ports:
+      - "3306:3306"
     command:
       [
         '--character-set-server=utf8mb4', #设置utf8编码
