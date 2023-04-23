@@ -39,6 +39,7 @@ func env() {
 		if host != "" {
 			MysqlAddr = fmt.Sprintf("%v:%v@tcp(%v)/%v?charset=utf8mb4&parseTime=True&loc=Local", user, password, host, databaseName)
 		}
+		fmt.Println(MysqlAddr)
 	}
 
 	listenAddr := os.Getenv("LISTEN_ADDR") // 监听地址
@@ -86,6 +87,7 @@ func config() {
 		if host != "" {
 			MysqlAddr = fmt.Sprintf("%v:%v@tcp(%v)/%v?charset=utf8mb4&parseTime=True&loc=Local", user, password, host, databaseName)
 		}
+		fmt.Println(MysqlAddr)
 	}
 
 	listenAddr := cfg.Section("").Key("listen_addr").String()

@@ -1,21 +1,26 @@
 package router
 
 import (
+	"fmt"
 	admin "movie/admin-dist"              // 后台资源
 	adminAssets "movie/admin-dist/assets" // 后台资源
 	"movie/dist"                          // 前台资源
 	"movie/dist/assets"                   // 前台资源
+	mm "movie/manager"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
-func Static(r *gin.Engine) {
+func Static(r *gin.Engine, manager *mm.Manager) {
 
 	// 前台
 	{
 		// 处理首页
 		r.GET("/", func(c *gin.Context) {
+			//记录pv uv
+			_,err := manager.AddUvPv(c.RemoteIP())
+			fmt.Println("err:",err)
 			c.Header("content-type", "text/html;charset=utf-8")
 			c.String(200, dist.Index)
 		})

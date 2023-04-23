@@ -106,5 +106,6 @@ type Db interface {
 	// db 特性，使用时需要检验返回的是否为nil空指针
 
 	DbGet() interface{} // 获取数据库句柄
-	DbType() int        // 获取数据库类型
+	DbType() int
+	AddUvPv(ip string) (uint, error)  // 添加pv
 }

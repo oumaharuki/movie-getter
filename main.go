@@ -17,13 +17,15 @@ func main() {
 
 	// 构造manager
 	manager := manager.NewManager()
+	mysqlAddr:= config.MysqlAddr
+	fmt.Println("mysql:",mysqlAddr)
 
 	r := gin.New()
 	r.Use(gin.Recovery())
 	{
 		// 处理跨域
 		r.Use(MiddleWare.Cors())
-		router.Static(r)
+		router.Static(r,manager)
 		// 配置路由
 		router.Router(r, manager)
 	}

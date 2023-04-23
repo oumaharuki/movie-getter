@@ -1,5 +1,7 @@
 package _struct
 
+import "time"
+
 type Source struct {
 	ID      uint
 	Name    string    `gorm:"unique;not null;index"` // 资源库名字
@@ -50,4 +52,10 @@ type System struct {
 	Account         string // 账户
 	Password        string // 密码
 	CollectInterval int    `gorm:"default:24"` // 采集间隔时间
+}
+
+type Uvpv struct {
+	ID       uint   `json:"id"`
+	Ip     string `json:"name"`
+	CreateTime     time.Time
 }

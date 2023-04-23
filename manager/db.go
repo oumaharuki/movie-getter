@@ -5,6 +5,7 @@ import (
 	_struct "movie/db/struct"
 	"movie/getter"
 	"strconv"
+	"time"
 )
 
 func (here *Manager) GetSource() ([]Source, error) {
@@ -357,6 +358,12 @@ func (here *Manager) ReGet(SourceId uint) error {
 	return nil
 }
 
+// AddCategory 增加自定义分类
+func (here *Manager) AddUvPv(ip string) (uint,error) {
+	id,err := here.db.AddUvPv(ip)
+	return id,err
+}
+
 type Source struct {
 	ID   uint   `json:"id"`
 	Name string `json:"name"`
@@ -390,4 +397,10 @@ type Category struct {
 	Main     bool   `json:"main,omitempty"`
 	ClassNum int    `json:"classNum,omitempty"`
 	MovieNum int    `json:"movieNum,omitempty"`
+}
+
+type Uvpv struct {
+	ID       uint   `json:"id"`
+	Ip     string `json:"name"`
+	CreateTime     time.Time
 }
