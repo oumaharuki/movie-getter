@@ -19,7 +19,8 @@ func Static(r *gin.Engine, manager *mm.Manager) {
 		// 处理首页
 		r.GET("/", func(c *gin.Context) {
 			//记录pv uv
-			_,err := manager.AddUvPv(c.RemoteIP())
+			ip := c.ClientIP()
+			_,err := manager.AddUvPv(ip)
 			fmt.Println("err:",err)
 			c.Header("content-type", "text/html;charset=utf-8")
 			c.String(200, dist.Index)
