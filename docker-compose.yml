@@ -7,7 +7,6 @@ services:
     container_name: mysql
     ports:
       - "3306:3306"
-    network_mode: my-network
     command:
       [
         '--character-set-server=utf8mb4', #设置utf8编码
@@ -29,7 +28,6 @@ services:
     ports:
       - "8000:8000"
     restart: always
-    network_mode: my-network
     extra_hosts:
       - "host.docker.internal:64.176.51.101"
     environment:
@@ -45,7 +43,6 @@ services:
     image: containrrr/watchtower
     container_name: watcher
     restart: always
-    network_mode: my-network
     environment:
       - TZ=Asia/Shanghai
     volumes:
@@ -55,7 +52,3 @@ services:
     # command: movie movie_watcher --cleanup --interval 60
 volumes:
   mysql_data:
-
-networks:
-  my-network:
-    driver: bridge
