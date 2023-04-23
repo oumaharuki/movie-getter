@@ -7,6 +7,7 @@ services:
     container_name: mysql
     ports:
       - "3306:3306"
+    network_mode: host
     command:
       [
         '--character-set-server=utf8mb4', #设置utf8编码
@@ -28,6 +29,7 @@ services:
     ports:
       - "8000:8000"
     restart: always
+    network_mode: host
     environment:
       TZ: Asia/Shanghai
       MYSQL_HOST: db:3306 # mysql地址
@@ -41,6 +43,7 @@ services:
     image: containrrr/watchtower
     container_name: watcher
     restart: always
+    network_mode: host
     environment:
       - TZ=Asia/Shanghai
     volumes:
