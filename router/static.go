@@ -30,10 +30,6 @@ func Static(r *gin.Engine, manager *mm.Manager) {
 			c.Header("Content-Type", "image/vnd.microsoft.icon")
 			c.String(200, string(dist.Icon))
 		})
-		r.GET("/baidu_verify_codeva-zG3Qxgfxiq.html", func(c *gin.Context) {
-			c.Header("Content-Type", "text/html;charset=utf-8")
-			c.String(200, string(dist.Baidu_verify_codeva))
-		})
 		// 处理静态文件
 		r.StaticFS("/assets", http.FS(assets.Assets))
 
