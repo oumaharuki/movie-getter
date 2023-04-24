@@ -69,7 +69,7 @@ git clone 本仓库的 master 分支至本地,cd 至项目根目录，执行`go 
 git clone 本仓库的 master 分支至本地,cd 至项目根目录，执行以下命令
 
 ```bash
-docker build --network=host -t yunyizhiying/movie .
+docker build --network=host -t movie .
 
 ```
 
