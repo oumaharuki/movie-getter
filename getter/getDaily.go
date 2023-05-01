@@ -26,8 +26,9 @@ func (here *Getter) getDaily() {
 				return
 			default:
 				// 默认继续采集
-				id := int(v.Value().(float64))
-				here.getContent(id)
+				name:=v.Get("vod_name")
+				//id := int(v.Value().(float64))
+				here.getContent(name.Str)
 			}
 		}
 		// 再次请求进行更新页数

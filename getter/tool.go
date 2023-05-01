@@ -15,9 +15,9 @@ import (
 )
 
 // 采集content
-func (here *Getter) getContent(id int) {
+func (here *Getter) getContent(title string) {
 	c := newHttpHandle()
-	res, err := c.Get(here.url + "?ac=detail&ids=" + strconv.Itoa(id))
+	res, err := c.Get(here.url + "?ac=detail&wd=" + title)
 	if err != nil {
 		util.Logger.Panic("getter get content failed, err:", err)
 		// panic后通过外部的recover来重新获取json

@@ -31,8 +31,9 @@ func (here *Getter) getAll() {
 			// 被取消了，返回
 			return
 		default:
-			id := int(v.Value().(float64))
-			here.getContent(id)
+			name:=v.Get("vod_name")
+			//id := int(v.Value().(float64))
+			here.getContent(name.Str)
 		}
 	}
 
@@ -75,6 +76,6 @@ func (here *Getter) getList(pgCount int) []gjson.Result {
 	}
 	defer res.Body.Close()
 	body, _ := io.ReadAll(res.Body)
-	list := gjson.Get(string(body), "list.#.vod_id").Array()
+	list := gjson.Get(string(body), "list").Array()
 	return list
 }
