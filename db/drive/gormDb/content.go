@@ -5,6 +5,7 @@ import (
 	"math"
 	"movie/db/struct"
 	"regexp"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -50,7 +51,7 @@ func (here *Db) AddContent(
 
 	if !isHave{
 		i := append(newUrl, "("+soureName+")"+url)
-		j:=append(oldSourceIds,string(sourceId))
+		j:=append(oldSourceIds,strconv.FormatUint(uint64(sourceId), 10))
 		println("i:{},j:{}",i,j)
 	}
 
@@ -204,7 +205,7 @@ func (here *Db) addContent(
 		Year: year,
 		Score: score,
 		Remarks: remarks,
-		SourceID: string(sourceId),
+		SourceID: strconv.FormatUint(uint64(sourceId), 10),
 	}
 	// 创建事务
 	tx := here.db.Begin()
