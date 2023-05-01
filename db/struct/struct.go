@@ -24,7 +24,7 @@ type Content struct {
 	Description string `gorm:"type:longText"` // 简介
 	Url         string `gorm:"type:longText"` // 视频链接
 	Stamp       int64  `gorm:"index"`         // 创建时间戳
-	SourceID    uint   `gorm:"index;default:null"`
+	SourceID    string
 	Pubdate     string
 	Area     string
 	Tag     string

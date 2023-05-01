@@ -29,19 +29,29 @@ func (here *Db) AddContent(
 ) error {
 	content, ok := here.getOneByName(name)
 	urlStr := content.Url
+	sourceIDs := content.SourceID
+	oldSourceIds:=strings.Split(sourceIDs,",")
 	urls := strings.Split(urlStr, ";")
 	newUrl:=[]string{}
+	isHave:=false
+
 	for i := 0; i < len(urls); i++ {
-		u:=urls[0]
+		u:=urls[i]
 		re := regexp.MustCompile(`（(.*?)）`) // 匹配括号中的内容
 		result := re.FindStringSubmatch(u)
 		//存在表示有旧数据
 		if len(result) > 1 && result[1]==soureName{
 			u="("+soureName+")"+url
-
+			isHave=true
 		}
 		i := append(newUrl, u)
 		println("i:{}",i)
+	}
+
+	if !isHave{
+		i := append(newUrl, "("+soureName+")"+url)
+		j:=append(oldSourceIds,string(sourceId))
+		println("i:{},j:{}",i,j)
 	}
 
 	if ok {
@@ -50,6 +60,7 @@ func (here *Db) AddContent(
 			tag ,
 			score ,
 			remarks ,
+			strings.Join(oldSourceIds,","),
 		)
 	}
 	return here.addContent(
@@ -97,6 +108,7 @@ func (here *Db) updateContent1(
 	tag string,
 	score string,
 	remarks string,
+	sourceIds string,
 ) error {
 	content := &_struct.Content{
 		Url:         url,
@@ -104,6 +116,7 @@ func (here *Db) updateContent1(
 		Tag: tag,
 		Score: score,
 		Remarks: remarks,
+		SourceID: sourceIds,
 	}
 	db := here.db.Model(&_struct.Content{
 		ID: id,
@@ -191,36 +204,22 @@ func (here *Db) addContent(
 		Year: year,
 		Score: score,
 		Remarks: remarks,
+		SourceID: string(sourceId),
 	}
 	// 创建事务
 	tx := here.db.Begin()
+
+	// 尝试寻找class
+	classId := here.getClassIdBySourceId(sourceId, class_Id)
+
+	// 尝试添加content与class关系
+	content.ClassID=classId
 
 	// 创建content
 	db = tx.Create(content)
 	if db.Error != nil {
 		tx.Rollback()
 		return db.Error
-	}
-
-	// 添加content与source关联
-	err := tx.Model(&_struct.Source{
-		ID: sourceId,
-	}).Association("Content").Append(content)
-	if err != nil {
-		tx.Rollback()
-		return err
-	}
-
-	// 尝试寻找class
-	classId := here.getClassIdBySourceId(sourceId, class_Id)
-
-	// 尝试添加content与class关系
-	err = tx.Model(&_struct.Class{
-		ID: classId,
-	}).Association("Content").Append(content)
-	if err != nil {
-		tx.Rollback()
-		return err
 	}
 
 	// 提交事务
@@ -286,11 +285,11 @@ func (here *Db) SearchContent_Class(classId uint, keyword string, num int, pg in
 func (here *Db) SearchContent_Source(sourceId uint, keyword string, num int, pg int) ([]_struct.Content, int, error) {
 	// 定义变量结果存储
 	var contents []_struct.Content
-	db := here.db.Select("id", "name", "pic", "actor", "director", "duration", "description", "url").Where("name LIKE ? AND source_id = ?", "%"+keyword+"%", sourceId).Offset(num * (pg - 1)).Limit(num).Find(&contents)
+	db := here.db.Select("id", "name", "pic", "actor", "director", "duration", "description", "url").Where("name LIKE ? AND FIND_IN_SET(source_id , ?)", "%"+keyword+"%", sourceId).Offset(num * (pg - 1)).Limit(num).Find(&contents)
 
 	// 尝试进行计数操作
 	var count int64
-	here.db.Model(&_struct.Content{}).Where("name LIKE ? AND source_id = ?", "%"+keyword+"%", sourceId).Count(&count)
+	here.db.Model(&_struct.Content{}).Where("name LIKE ? AND FIND_IN_SET(source_id, ?)", "%"+keyword+"%", sourceId).Count(&count)
 
 	// 返回结果
 	return contents, int(math.Ceil(float64(count) / float64(num))), db.Error
@@ -348,11 +347,11 @@ func (here *Db) ContentList_Class(classId uint, num int, pg int) ([]_struct.Cont
 func (here *Db) ContentList_Source(sourceId uint, num int, pg int) ([]_struct.Content, int, error) {
 	// 定义变量结果存储
 	var contents []_struct.Content
-	db := here.db.Select("id", "name", "pic", "actor", "director", "duration", "description", "url").Where("source_id = ?", sourceId).Offset(num * (pg - 1)).Limit(num).Find(&contents)
+	db := here.db.Select("id", "name", "pic", "actor", "director", "duration", "description", "url").Where("FIND_IN_SET(source_id , ?)", sourceId).Offset(num * (pg - 1)).Limit(num).Find(&contents)
 
 	// 尝试进行计数操作
 	var count int64
-	here.db.Model(&_struct.Content{}).Where("source_id = ?", sourceId).Count(&count)
+	here.db.Model(&_struct.Content{}).Where("FIND_IN_SET(source_id , ?)", sourceId).Count(&count)
 
 	// 返回结果
 	return contents, int(math.Ceil(float64(count) / float64(num))), db.Error
