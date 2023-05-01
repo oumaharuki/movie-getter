@@ -4,34 +4,53 @@ import (
 	"gorm.io/gorm"
 	"math"
 	"movie/db/struct"
+	"regexp"
+	"strings"
 	"time"
 )
 
 func (here *Db) AddContent(
 	content_Id int,
 	name string, // 影片名
-	pic string, //
+	pic string,  //
 	actor string,
 	director string,
 	duration string,
 	description string,
 	url string,
-	class_Id int, //所属类别
+	class_Id int,  //所属类别
 	sourceId uint, // source id
+	soureName string,
+	pubdate string,
+	area string,
+	tag string,
+	year string,
+	score string,
+	remarks string,
 ) error {
-	id, ok := here.existContent(content_Id, sourceId)
+	content, ok := here.getOneByName(name)
+	urlStr := content.Url
+	urls := strings.Split(urlStr, ";")
+	newUrl:=[]string{}
+	for i := 0; i < len(urls); i++ {
+		u:=urls[0]
+		re := regexp.MustCompile(`（(.*?)）`) // 匹配括号中的内容
+		result := re.FindStringSubmatch(u)
+		//存在表示有旧数据
+		if len(result) > 1 && result[1]==soureName{
+			u="("+soureName+")"+url
+
+		}
+		i := append(newUrl, u)
+		println("i:{}",i)
+	}
+
 	if ok {
-		return here.updateContent(id,
-			content_Id,
-			name,
-			pic,
-			actor,
-			director,
-			duration,
-			description,
-			url,
-			//class_Id,
-			//sourceId,
+		return here.updateContent1(content.ID,
+			strings.Join(newUrl,";"),
+			tag ,
+			score ,
+			remarks ,
 		)
 	}
 	return here.addContent(
@@ -44,7 +63,14 @@ func (here *Db) AddContent(
 		description,
 		url,
 		class_Id,
-		sourceId)
+		sourceId,
+		soureName,
+		pubdate,
+		area ,
+		tag ,
+		year ,
+		score ,
+		remarks ,)
 }
 
 func (here *Db) existContent(content_Id int, sourceId uint) (uint, bool) {
@@ -57,18 +83,54 @@ func (here *Db) existContent(content_Id int, sourceId uint) (uint, bool) {
 	return content.ID, true
 }
 
+func (here *Db) getOneByName(name string) (_struct.Content,bool) {
+	var content _struct.Content
+	here.db.Where("name=?",name).Select("id", "name",  "url").Limit(1).Find(&content)
+	if content.ID == 0 {
+		return content, false
+	}
+
+	return content, true
+}
+
+func (here *Db) updateContent1(
+	id uint,
+	url string,
+	tag string,
+	score string,
+	remarks string,
+) error {
+	content := &_struct.Content{
+		Url:         url,
+		Stamp:       time.Now().Unix(),
+		Tag: tag,
+		Score: score,
+		Remarks: remarks,
+	}
+	db := here.db.Model(&_struct.Content{
+		ID: id,
+	}).Updates(content)
+	return db.Error
+}
+
 func (here *Db) updateContent(
 	id uint,
 	content_Id int,
 	name string, // 影片名
-	pic string, //
+	pic string,  //
 	actor string,
 	director string,
 	duration string,
 	description string,
 	url string,
-	// class_Id int, //所属类别
-	// sourceId uint, // source id
+	pubdate string,
+	area string,
+	tag string,
+	year string,
+	score string,
+	remarks string,
+// class_Id int, //所属类别
+// sourceId uint, // source id
 ) error {
 	content := &_struct.Content{
 
@@ -81,6 +143,12 @@ func (here *Db) updateContent(
 		Description: description,
 		Url:         url,
 		Stamp:       time.Now().Unix(),
+		Pubdate: pubdate,
+		Area: area,
+		Tag: tag,
+		Year: year,
+		Score: score,
+		Remarks: remarks,
 	}
 	db := here.db.Model(&_struct.Content{
 		ID: id,
@@ -91,15 +159,23 @@ func (here *Db) updateContent(
 func (here *Db) addContent(
 	content_Id int,
 	name string, // 影片名
-	pic string, //
+	pic string,  //
 	actor string,
 	director string,
 	duration string,
 	description string,
 	url string,
-	class_Id int, //所属类别
+	class_Id int,  //所属类别
 	sourceId uint, // source id
+	soureName string,
+	pubdate string,
+	area string,
+	tag string,
+	year string,
+	score string,
+	remarks string,
 ) error {
+	url="("+soureName+")"+url
 	var db *gorm.DB
 	content := &_struct.Content{
 		ContentId:   content_Id,
@@ -111,6 +187,12 @@ func (here *Db) addContent(
 		Description: description,
 		Url:         url,
 		Stamp:       time.Now().Unix(),
+		Pubdate: pubdate,
+		Area: area,
+		Tag: tag,
+		Year: year,
+		Score: score,
+		Remarks: remarks,
 	}
 	// 创建事务
 	tx := here.db.Begin()

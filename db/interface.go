@@ -27,7 +27,13 @@ type Db interface {
 
 	AddContent(
 		content_Id int, name string, pic string, actor string, director string,
-		duration string, description string, url string, class_Id int, sourceId uint,
+		duration string, description string, url string, class_Id int, sourceId uint,soureName string,
+		pubdate string,
+		area string,
+		tag string,
+		year string,
+		score string,
+		remarks string,
 	) error // 添加影片
 	DelContent(
 		id uint,

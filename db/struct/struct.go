@@ -25,6 +25,12 @@ type Content struct {
 	Url         string `gorm:"type:longText"` // 视频链接
 	Stamp       int64  `gorm:"index"`         // 创建时间戳
 	SourceID    uint   `gorm:"index;default:null"`
+	Pubdate     string
+	Area     string
+	Tag     string
+	Year     string
+	Score     string
+	Remarks     string
 	ClassID     uint   `gorm:"index;default:null"`
 	// 属于分类
 } // 资源内容

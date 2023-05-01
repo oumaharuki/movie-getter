@@ -57,10 +57,23 @@ func (here *Getter) getContent(id int) {
 	url := gjson.Get(string(body), "list.0.vod_play_url").Value().(string)
 	url = urlHandle(url)
 
+	pubdate := gjson.Get(string(body), "list.0.vod_pubdate").Value().(string)
+	area := gjson.Get(string(body), "list.0.vod_area").Value().(string)
+	tag := gjson.Get(string(body), "list.0.vod_tag").Value().(string)
+	year := gjson.Get(string(body), "list.0.vod_year").Value().(string)
+	score := gjson.Get(string(body), "list.0.vod_douban_score").Value().(string)
+	remarks := gjson.Get(string(body), "list.0.vod_remarks").Value().(string)
+
 	// 获取属于的source
 	belong := here.id
+	soureName := here.name
 	util.Logger.Info("collect resource station called ", here.name, "get a film called", name)
-	err = db.AddContent(id, name, pic, actor, director, duration, description, url, class, belong)
+	err = db.AddContent(id, name, pic, actor, director, duration, description, url, class, belong,soureName,pubdate ,
+		area ,
+		tag ,
+		year ,
+		score ,
+		remarks ,)
 	if err != nil {
 		util.Logger.Error("getter get content, store the data to database failed, err:", err)
 	}
