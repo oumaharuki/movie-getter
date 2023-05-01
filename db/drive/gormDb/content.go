@@ -10,7 +10,6 @@ import (
 )
 
 func (here *Db) AddContent(
-	content_Id int,
 	name string, // 影片名
 	pic string,  //
 	actor string,
@@ -54,7 +53,6 @@ func (here *Db) AddContent(
 		)
 	}
 	return here.addContent(
-		content_Id,
 		name,
 		pic,
 		actor,
@@ -157,7 +155,7 @@ func (here *Db) updateContent(
 }
 
 func (here *Db) addContent(
-	content_Id int,
+	//content_Id int,
 	name string, // 影片名
 	pic string,  //
 	actor string,
@@ -178,7 +176,7 @@ func (here *Db) addContent(
 	url="("+soureName+")"+url
 	var db *gorm.DB
 	content := &_struct.Content{
-		ContentId:   content_Id,
+		//ContentId:   content_Id,
 		Name:        name,
 		Pic:         pic,
 		Actor:       actor,

@@ -26,7 +26,7 @@ type Db interface {
 	// Content 影片接口
 
 	AddContent(
-		content_Id int, name string, pic string, actor string, director string,
+		name string, pic string, actor string, director string,
 		duration string, description string, url string, class_Id int, sourceId uint,soureName string,
 		pubdate string,
 		area string,

@@ -6,7 +6,6 @@ import (
 	"movie/util"
 	"net/http"
 	"regexp"
-	"strconv"
 	"strings"
 	"sync/atomic"
 	"time"
@@ -68,7 +67,7 @@ func (here *Getter) getContent(title string) {
 	belong := here.id
 	soureName := here.name
 	util.Logger.Info("collect resource station called ", here.name, "get a film called", name)
-	err = db.AddContent(id, name, pic, actor, director, duration, description, url, class, belong,soureName,pubdate ,
+	err = db.AddContent( name, pic, actor, director, duration, description, url, class, belong,soureName,pubdate ,
 		area ,
 		tag ,
 		year ,
