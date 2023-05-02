@@ -113,5 +113,6 @@ type Db interface {
 
 	DbGet() interface{} // 获取数据库句柄
 	DbType() int
-	AddUvPv(ip string) (uint, error)  // 添加pv
+	AddUvPv(ip string) (uint, error)// 添加pv
+	GetSourceById(id uint) (_struct.Source, error)  //获取采集源
 }

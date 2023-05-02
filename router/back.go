@@ -1,6 +1,7 @@
 package router
 
 import (
+	"movie/getter"
 	mm "movie/manager"
 	"movie/router/MiddleWare"
 	"movie/util"
@@ -100,6 +101,30 @@ func back(r *gin.Engine, manager *mm.Manager) {
 			}
 			manager.GetStartById(uint(id))
 			util.Logger.Debug("Start collection, id:", id)
+			c.Status(http.StatusOK)
+		})
+
+		//采集指定名字影片（精确）
+		user.GET("/start/collecte/:sourceId/:videoName", func(c *gin.Context){
+			sourceIdV := c.Param("sourceId")
+			videoName := c.Param("videoName")
+			sourceId, err := strconv.Atoi(sourceIdV)
+			if err != nil {
+				c.Status(http.StatusBadRequest)
+				util.Logger.Warn("Start collection failed, the param idV is not integer")
+				return
+			}
+
+			source, err := manager.GetSourceById(uint(sourceId))
+			if err!=nil{
+				c.Status(http.StatusBadRequest)
+				util.Logger.Warn("Start collection failed, source is nil")
+				return
+			}
+
+			newGetter := getter.NewGetter(source.ID, source.Name, source.Url, source.Ok, source.Pg)
+			//
+			newGetter.GetContentByVideoName(videoName)
 			c.Status(http.StatusOK)
 		})
 

@@ -14,6 +14,7 @@ type Manager struct {
 	session session.Session         // session 部分
 }
 
+
 /*
 
  todo 处理根据配置文件构建db句柄

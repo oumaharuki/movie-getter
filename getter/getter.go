@@ -91,3 +91,7 @@ func (here *Getter) ReGet() {
 	here.ok = false // 采集进度调整为false，即未采集完成
 	here.StartGet()
 }
+
+func (here *Getter) GetContentByVideoName(name string) {
+	here.getContent(name)
+}

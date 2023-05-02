@@ -110,3 +110,9 @@ func (here *Db) sourceInit(url string, sourceId uint) error {
 	}
 	return nil
 }
+
+func (here *Db) GetSourceById(id uint) (_struct.Source, error) {
+	var source _struct.Source
+	db := here.db.First(&source, id)
+	return source, db.Error
+}

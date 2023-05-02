@@ -24,6 +24,11 @@ func (here *Manager) GetSource() ([]Source, error) {
 	return sources, err
 }
 
+func (here *Manager) GetSourceById(sourceId uint)(_struct.Source, error) {
+	source, err := here.db.GetSourceById(sourceId)
+	return source,err
+}
+
 // AddSource 增加采集源
 func (here *Manager) AddSource(name string, url string) bool {
 	id, ok := here.db.AddSource(name, url)

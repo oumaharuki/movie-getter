@@ -9,7 +9,7 @@ type Source struct {
 	Ok      bool      `gorm:"default:false"`         // 资源库是否采集完
 	Pg      int       `gorm:"default:1"`             // 资源库采集的页数
 	Class   []Class   `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
-	Content []Content `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+	//Content []Content `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 } // 资源库表定义
 
 type Content struct {
@@ -24,7 +24,7 @@ type Content struct {
 	Description string `gorm:"type:longText"` // 简介
 	Url         string `gorm:"type:longText"` // 视频链接
 	Stamp       int64  `gorm:"index"`         // 创建时间戳
-	SourceID    string
+	SourceID    string `gorm:"type:longText"`
 	Pubdate     string
 	Area     string
 	Tag     string
@@ -40,7 +40,7 @@ type Class struct {
 	Name       string    // 采集分类名
 	ClassId    int       `gorm:"not null;index"` // 采集分类id
 	Get        bool      `gorm:"default:true"`   // 是否采集
-	Content    []Content `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+	//Content    []Content `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 	SourceID   uint      `gorm:"default:null"`
 	CategoryID uint      `gorm:"default:null"`
 	// 属于资源库
