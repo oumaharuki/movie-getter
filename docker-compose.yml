@@ -12,7 +12,7 @@ services:
       - "host.docker.internal:64.176.51.101"
     environment:
       TZ: Asia/Shanghai
-      MYSQL_HOST: db:3306 # mysql地址
+      MYSQL_HOST: 10.0.2.132:3306 # mysql地址
       MYSQL_USER: movie # mysql用户名
       MYSQL_PASSWORD: LwF7iFMNeXzC4p4z # mysql密码
       DATABASE_NAME: movie # mysql数据库
