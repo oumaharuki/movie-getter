@@ -1,7 +1,6 @@
 package gormDb
 
 import (
-	"fmt"
 	"gorm.io/gorm"
 	"math"
 	"movie/db/struct"
@@ -32,9 +31,9 @@ func (here *Db) AddContent(
 	content, ok := here.getOneByName(name)
 	urlStr := content.Url
 	sourceIDs := content.SourceID
-	fmt.Println("sourceIDs:",sourceIDs)
+
 	oldSourceIds:=strings.Split(sourceIDs,",")
-	fmt.Println("oldSourceIds:",oldSourceIds)
+
 	urls := strings.Split(urlStr, ";")
 	newUrl:=[]string{}
 	isHave:=false
@@ -56,8 +55,9 @@ func (here *Db) AddContent(
 		oldSourceIds=append(oldSourceIds,strconv.FormatUint(uint64(sourceId), 10))
 	}
 
+	newUrl= removeDuplicate(newUrl)
+	oldSourceIds= removeDuplicate(oldSourceIds)
 	if ok {
-		fmt.Println("oldSourceIds:",oldSourceIds)
 		return here.updateContent1(content.ID,
 			strings.Join(newUrl,";"),
 			tag ,
@@ -83,6 +83,18 @@ func (here *Db) AddContent(
 		year ,
 		score ,
 		remarks ,)
+}
+
+func removeDuplicate(arr []string) []string {
+	m := make(map[string]bool)
+	for _, v := range arr {
+		m[v] = true
+	}
+	var result []string
+	for k := range m {
+		result = append(result, k)
+	}
+	return result
 }
 
 func (here *Db) existContent(content_Id int, sourceId uint) (uint, bool) {

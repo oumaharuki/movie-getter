@@ -32,7 +32,6 @@ func (here *Getter) getAll() {
 			return
 		default:
 			name:=v.Get("vod_name")
-			print("videoname:",name.Str)
 			//id := int(v.Value().(float64))
 			here.getContent(name.Str)
 		}
